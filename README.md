@@ -29,6 +29,10 @@
 
 ## 功能
 
+**Android 4.4.2 适配分支**：新增独立的 `legacy/` 原生兼容模块（API 19+），
+提供遥控桌面、应用整理、壁纸、时钟与 H.264 航拍屏保；与原版独立安装。
+功能差异、编译和验证方式见 [Android 4.4.2 兼容说明](docs/ANDROID44.md)。
+
 <p align="center">
   <img src="site/img/focus.jpg" width="49%" alt="第一排的玻璃底板">
   <img src="site/img/grid.jpg" width="49%" alt="往下滚动后的应用网格，最后一个是文件夹">

@@ -1,0 +1,36 @@
+name: Android 4.4 compatibility
+
+on:
+  push:
+    branches: [main, 'compat/**']
+    paths: ['legacy/**', 'app/src/main/assets/**', '*.gradle.kts', 'gradle/**', '.github/workflows/legacy.yml']
+  pull_request:
+    paths: ['legacy/**', 'app/src/main/assets/**', '*.gradle.kts', 'gradle/**', '.github/workflows/legacy.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+      - run: >-
+          ./gradlew :legacy:assembleStandardRelease :legacy:assembleGuardRelease
+          :legacy:assembleStandardReleaseAndroidTest :legacy:lintStandardRelease :legacy:lintGuardRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aerial-android44
+          path: |
+            legacy/build/outputs/apk/standard/release/*.apk
+            legacy/build/outputs/apk/guard/release/*.apk
+            legacy/build/outputs/reports/lint-results-*.html
+          if-no-files-found: error

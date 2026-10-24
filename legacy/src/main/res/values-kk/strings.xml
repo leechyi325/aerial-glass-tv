@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Aerial Legacy</string>
+    <string name="settings">Баптаулар</string>
+    <string name="apps">Қолданбалар</string>
+    <string name="home_hint">Бағыттар: таңдау · OK: ашу · OK ұстап тұру / Мәзір: реттеу · Артқа: экран сақтағыш</string>
+    <string name="connected">Қосылған</string>
+    <string name="offline">Желі жоқ</string>
+    <string name="unavailable">Бұл жүйеде осы әрекетке арналған қолжетімді бет жоқ.</string>
+    <string name="pin_first">Бірінші орынға жылжыту</string>
+    <string name="hide">Қолданбаны жасыру</string>
+    <string name="app_info">Қолданба туралы</string>
+    <string name="wallpaper">Тұсқағаз</string>
+    <string name="screensaver">Экран сақтағыш</string>
+    <string name="idle_time">Экран сақтағышты бастау</string>
+    <string name="preview">Экран сақтағышты көру</string>
+    <string name="network_settings">Желі баптаулары</string>
+    <string name="system_settings">Жүйе баптаулары</string>
+    <string name="guard_name">Басты экранды қорғау</string>
+    <string name="guard_description">Қаласаңыз, арнайы мүмкіндіктерде Aerial Legacy қызметін қосыңыз: жүйелік басты экран ашылғанда осында қайтарады. Пернелер ұсталмайды. Кейбір жүйелер оқиғаларды жібермейді. Жүйелік экран тақтасын ашу Aerial қайта ашылғанша қорғауды тоқтатады. Қалпына келтіру үшін сол баптауда қызметті өшіріңіз.</string>
+    <string name="open_settings">Баптауларды ашу</string>
+    <string name="boot">Жүктелгенде ашу: %1$s</string>
+    <string name="on">Қосулы</string>
+    <string name="off">Өшірулі</string>
+    <string name="restore_hidden">Жасырын қолданбаларды көрсету</string>
+    <string name="about">Үйлесімділік туралы</string>
+    <string name="about_body">Aerial 1.43 негізіндегі Android 4.4+ нұсқасы. Пультке арналған жүйелік интерфейс және H.264. Бөлек пакет пен баптаулар. 4K/HDR, телефоннан баптау, бумалар, ата-ана PIN, ауа райы және автоматты жаңарту жоқ. Автоқосу мен экранды қорғау әдепкіде өшірулі. Жүйе шектеулері сақталуы мүмкін. Ескі жүйеде HTTPS қолжетімсіз болса, Apple ашық бейнелері HTTP қолдануы мүмкін.</string>
+    <string name="image_failed">Сурет импортталмады. Кішірек JPEG немесе PNG көріңіз.</string>
+    <string name="video_loading">Бейне жүктелуде…</string>
+    <string name="video_failed">Бейне қолжетімсіз. Сағат көрсетілді. Желі мен H.264 қолдауын тексеріңіз.</string>
+    <string-array name="wallpapers"><item>Мұхит</item><item>Ымырт</item><item>Құмдар</item><item>Фото таңдау…</item></string-array>
+    <string-array name="screensavers"><item>Сағат пен тұсқағаз</item><item>Әуе бейнесі · 1080p H.264</item></string-array>
+    <string-array name="idle_times"><item>Ешқашан</item><item>2 минут</item><item>5 минут</item><item>10 минут</item><item>30 минут</item></string-array>
+    <string name="loading_apps">Қолданбалар жүктелуде…</string>
+    <string name="no_apps">Ашылатын қолданбалар табылмады.</string>
+</resources>

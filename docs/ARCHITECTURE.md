@@ -4,6 +4,10 @@
 
 ## 目录一览
 
+Android 4.4.2 兼容分支另有 `legacy/` 模块：原生 Java / View / MediaPlayer，
+minSdk 19、targetSdk 28、独立包名 `app.orchard.tv.legacy`，共用航拍目录，
+不依赖 `app/` 的代码与依赖。具体能力与测试见 [ANDROID44.md](ANDROID44.md)。
+
 ```
 app/src/main/java/app/orchard/tv/
 ├── MainActivity.kt          HOME Activity：窗口设置、960×540 画布密度、广播/网络监听、空闲计时与桌面内屏保、启动 App

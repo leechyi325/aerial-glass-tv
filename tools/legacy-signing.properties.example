@@ -1,0 +1,6 @@
+# Copy to local/legacy-signing.properties. Keep the keystore in local/ too.
+# Create a separate key for this fork; never commit real credentials.
+storeFile=legacy-release.keystore
+storePassword=REPLACE_ME
+keyAlias=aerial-legacy
+keyPassword=REPLACE_ME

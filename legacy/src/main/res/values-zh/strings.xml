@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Aerial 兼容版</string>
+    <string name="settings">设置</string>
+    <string name="apps">应用</string>
+    <string name="home_hint">方向键选择 · 确定打开 · 长按确定 / 菜单键整理 · 返回预览屏保</string>
+    <string name="connected">网络已连接</string>
+    <string name="offline">未联网</string>
+    <string name="unavailable">此系统没有可打开的对应页面。</string>
+    <string name="pin_first">移到第一位</string>
+    <string name="hide">隐藏应用</string>
+    <string name="app_info">应用详情</string>
+    <string name="wallpaper">壁纸</string>
+    <string name="screensaver">屏保</string>
+    <string name="idle_time">屏保开始时间</string>
+    <string name="preview">预览屏保</string>
+    <string name="network_settings">网络设置</string>
+    <string name="system_settings">系统设置</string>
+    <string name="guard_name">桌面守护</string>
+    <string name="guard_description">可选：在系统无障碍设置中开启 Aerial 兼容版，原桌面出现时返回这里。不拦截遥控器按键。部分厂商桌面不发送无障碍事件，可能无法接管。从磁贴打开原桌面后，守护暂停，直到重新打开 Aerial。关闭同一设置中的服务即可恢复。</string>
+    <string name="open_settings">打开设置</string>
+    <string name="boot">开机打开：%1$s</string>
+    <string name="on">开启</string>
+    <string name="off">关闭</string>
+    <string name="restore_hidden">显示已隐藏的应用</string>
+    <string name="about">兼容说明</string>
+    <string name="about_body">基于 Aerial 1.43 的 Android 4.4+ 兼容版，使用原生遥控界面和 H.264 播放。包名和设置独立。暂不包含 4K/HDR、手机配置、文件夹、家长密码、天气和自动升级。开机自启与桌面守护默认关闭，仍可能受厂商主页键和启动限制影响。旧系统无法建立 HTTPS 时，苹果公开航拍视频可能回退到 HTTP。</string>
+    <string name="image_failed">无法导入图片，请尝试较小的 JPEG 或 PNG。</string>
+    <string name="video_loading">正在加载航拍…</string>
+    <string name="video_failed">视频暂不可用，已显示时钟。请检查网络和 H.264 解码支持。</string>
+    <string-array name="wallpapers"><item>海洋</item><item>暮色</item><item>沙丘</item><item>选择照片…</item></string-array>
+    <string-array name="screensavers"><item>时钟与壁纸</item><item>航拍 · 1080p H.264</item></string-array>
+    <string-array name="idle_times"><item>从不</item><item>2 分钟</item><item>5 分钟</item><item>10 分钟</item><item>30 分钟</item></string-array>
+    <string name="loading_apps">正在加载应用…</string>
+    <string name="no_apps">没有找到可启动的应用。</string>
+</resources>

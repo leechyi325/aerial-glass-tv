@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Aerial Legacy</string>
+    <string name="settings">Налаштування</string>
+    <string name="apps">Застосунки</string>
+    <string name="home_hint">Стрілки: вибір · OK: відкрити · Утримувати OK / Меню: дії · Назад: заставка</string>
+    <string name="connected">Підключено</string>
+    <string name="offline">Немає мережі</string>
+    <string name="unavailable">Ця прошивка не має доступного екрана для цієї дії.</string>
+    <string name="pin_first">Перемістити на початок</string>
+    <string name="hide">Приховати застосунок</string>
+    <string name="app_info">Про застосунок</string>
+    <string name="wallpaper">Шпалери</string>
+    <string name="screensaver">Заставка</string>
+    <string name="idle_time">Час до заставки</string>
+    <string name="preview">Перегляд заставки</string>
+    <string name="network_settings">Налаштування мережі</string>
+    <string name="system_settings">Налаштування системи</string>
+    <string name="guard_name">Захист головного екрана</string>
+    <string name="guard_description">За бажанням увімкніть Aerial Legacy у спеціальних можливостях: поява штатного головного екрана поверне сюди. Клавіші не перехоплюються. Деякі прошивки не надсилають події. Відкриття плитки штатного екрана призупиняє захист до наступного відкриття Aerial. Для скасування вимкніть службу в тих самих налаштуваннях.</string>
+    <string name="open_settings">Відкрити налаштування</string>
+    <string name="boot">Відкривати після запуску: %1$s</string>
+    <string name="on">Увімк.</string>
+    <string name="off">Вимк.</string>
+    <string name="restore_hidden">Показати приховані застосунки</string>
+    <string name="about">Про сумісність</string>
+    <string name="about_body">Версія для Android 4.4+ на основі Aerial 1.43. Системний інтерфейс для пульта та H.264. Окремий пакет і налаштування. Без 4K/HDR, налаштування з телефона, папок, батьківського PIN, погоди й автооновлень. Автозапуск і захист екрана спочатку вимкнені. Обмеження прошивки можуть зберігатися. Публічне відео Apple може використовувати HTTP, якщо стара система не підтримує HTTPS.</string>
+    <string name="image_failed">Не вдалося імпортувати зображення. Спробуйте менший JPEG або PNG.</string>
+    <string name="video_loading">Завантаження відео…</string>
+    <string name="video_failed">Відео недоступне. Показано годинник. Перевірте мережу й підтримку H.264.</string>
+    <string-array name="wallpapers"><item>Океан</item><item>Сутінки</item><item>Дюни</item><item>Вибрати фото…</item></string-array>
+    <string-array name="screensavers"><item>Годинник і шпалери</item><item>Аеровідео · 1080p H.264</item></string-array>
+    <string-array name="idle_times"><item>Ніколи</item><item>2 хвилини</item><item>5 хвилин</item><item>10 хвилин</item><item>30 хвилин</item></string-array>
+    <string name="loading_apps">Завантаження застосунків…</string>
+    <string name="no_apps">Доступних застосунків не знайдено.</string>
+</resources>

@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.AerialLegacy" parent="android:style/Theme.Holo.NoActionBar.Fullscreen">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:colorBackground">#101A30</item>
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
+</resources>
