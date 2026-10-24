@@ -67,7 +67,9 @@ adb shell am start -n app.orchard.tv.legacy/.MainActivity
 默认不设置为系统桌面、不改系统属性、不写无障碍列表、不修改系统屏保、不停用
 任何系统包。开启守护需在系统无障碍设置里选择 Aerial；固件没有入口时会提示。
 从原桌面磁贴进入后，守护会暂停，直到手动重新打开 Aerial，方便访问原生功能。
-开机自启依赖固件是否发放 `BOOT_COMPLETED`，不能保证绕过厂商限制。
+开机自启会同步本应用开机接收器的启用状态，打开 Aerial 时也会按用户的自启偏好
+恢复被禁用的接收器；只改本应用组件。仍依赖固件发放 `BOOT_COMPLETED`，不能保证
+绕过其他厂商限制。海信 Hi3751 / Android 4.4.2 的真实重启结果见下文。
 
 要回退，先在兼容版设置中关闭开机自启，在系统无障碍设置中关闭其守护服务，
 若曾设为默认桌面，先从系统应用设置清除本应用默认项并选择原桌面。
@@ -127,3 +129,24 @@ adb shell am instrument -w \
 - 海信 Android 4.4.2 standard release 上，方向导航、底栏展开/收回、末行返回、
   应用启动/返回、三轮屏保唤醒测试通过；两种 release 的严格 lint 均无问题。
   实体遥控器长按及其他机型的视觉/性能表现仍需单独验证。
+
+## 自启修复（1.43-legacy.3，versionCode 3）
+
+问题：自启偏好已经开启，但 PackageManager 将本应用的 `BootReceiver` 标记为
+disabled。旧版开关只改偏好，不恢复组件，因而重启时没有机会执行启动逻辑。
+尚不能确定这台固件或哪个设置操作禁用了接收器，不能把原因笼统归为广播不发送。
+
+现在开关同时同步本应用的接收器状态，页面恢复时也校验一次；关闭自启则禁用
+本应用的接收器，不影响其他应用。新增 `dumpsys activity` 的 `Boot:` 诊断行：
+开关值、接收器状态、收到的广播、系统运行时间、启动结果与错误。
+
+2026-10-24 在同一台海信 Hi3751 / Android 4.4.2 standard release 上：
+
+- 回归测试复现“偏好 true + 组件 disabled”，打开应用后接收器恢复为 enabled。
+- 实际执行系统重启，重启后只读取状态，没有通过 ADB 手动打开 Aerial。
+- 收到标准 `android.intent.action.BOOT_COMPLETED`（elapsedRealtime 约 32 秒），
+  结果 `activity-requested`、`error=none`；随后前台窗口为 Aerial MainActivity。
+- 默认桌面和无障碍设置与修复前一致；没有禁用或修改原桌面。
+- 两种 release 编译和严格 lint 通过。尚未进行拔电源线测试或待机唤醒测试。
+
+关闭兼容版设置中的“开机打开”即可撤销本应用自启。测试日志只保存在 `local/`。

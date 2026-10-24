@@ -232,6 +232,7 @@ public final class MainActivity extends Activity {
     @Override protected void onResume() {
         super.onResume();
         foreground = true;
+        BootSetup.sync(this);
         HomeGuardService.returnedHome();
         updateClock();
         resetIdle();
@@ -335,7 +336,7 @@ public final class MainActivity extends Activity {
     }
 
     private void showSettings() {
-        boolean boot = Preferences.get(this).getBoolean("boot", false);
+        boolean boot = BootSetup.enabled(this);
         dialog = new AlertDialog.Builder(this).setTitle(R.string.settings)
                 .setItems(new CharSequence[]{getString(R.string.wallpaper), getString(R.string.screensaver),
                         getString(R.string.idle_time), getString(R.string.preview), getString(R.string.network_settings),
@@ -355,7 +356,9 @@ public final class MainActivity extends Activity {
                                             (a, b) -> open(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
                                     .setNegativeButton(android.R.string.cancel, null).create();
                             showDialog(); break;
-                        case 7: Preferences.get(this).edit().putBoolean("boot", !boot).apply(); break;
+                        case 7:
+                            if (!BootSetup.setEnabled(this, !boot)) Toast.makeText(this, R.string.boot_blocked, Toast.LENGTH_LONG).show();
+                            break;
                         case 8: Preferences.get(this).edit().remove("hidden").apply(); reloadApps(); break;
                         case 9:
                             dialog = new AlertDialog.Builder(this).setTitle(R.string.app_name).setMessage(R.string.about_body)
@@ -500,5 +503,10 @@ public final class MainActivity extends Activity {
                 + " apps=" + apps.size() + " selected=" + grid.getSelectedItemPosition()
                 + " foreground=" + foreground + " clock=" + clock.getText());
         writer.println(prefix + "Screensaver: " + ScreensaverView.diagnostics());
+        android.content.SharedPreferences bootLog = getSharedPreferences("boot_diagnostics", MODE_PRIVATE);
+        writer.println(prefix + "Boot: enabled=" + BootSetup.enabled(this) + " receiverState=" + BootSetup.receiverState(this)
+                + " action=" + bootLog.getString("action", "none")
+                + " receivedElapsed=" + bootLog.getLong("received_elapsed", -1)
+                + " result=" + bootLog.getString("result", "none") + " error=" + bootLog.getString("error", "none"));
     }
 }

@@ -15,16 +15,24 @@ import android.widget.GridView;
 public final class LegacyInstrumentation extends Instrumentation {
     private Activity home;
     private boolean aerial;
+    private boolean bootRepair, enableBoot;
 
     @Override public void onCreate(Bundle arguments) {
         super.onCreate(arguments);
         aerial = arguments != null && "true".equals(arguments.getString("aerial"));
+        bootRepair = arguments != null && "true".equals(arguments.getString("boot_receiver_repair"));
+        enableBoot = arguments != null && "true".equals(arguments.getString("enable_boot"));
         start();
     }
 
     @Override public void onStart() {
         Bundle result = new Bundle();
         try {
+            if (bootRepair) {
+                result.putString("stream", testBootReceiverRepair());
+                finish(Activity.RESULT_OK, result);
+                return;
+            }
             Intent launch = getTargetContext().getPackageManager()
                     .getLaunchIntentForPackage(getTargetContext().getPackageName());
             check(launch != null, "Launcher entry missing");
@@ -105,6 +113,38 @@ public final class LegacyInstrumentation extends Instrumentation {
         } catch (Throwable failure) {
             result.putString("stream", "FAIL: " + android.util.Log.getStackTraceString(failure));
             finish(Activity.RESULT_CANCELED, result);
+        }
+    }
+
+    private String testBootReceiverRepair() {
+        android.content.Context context = getTargetContext();
+        android.content.SharedPreferences prefs = context.getSharedPreferences("legacy", 0);
+        android.content.ComponentName receiver = new android.content.ComponentName(context.getPackageName(),
+                "app.orchard.tv.legacy.BootReceiver");
+        android.content.pm.PackageManager pm = context.getPackageManager();
+        boolean existed = prefs.contains("boot"), before = prefs.getBoolean("boot", false);
+        int stateBefore = pm.getComponentEnabledSetting(receiver);
+        try {
+            check(prefs.edit().putBoolean("boot", true).commit(), "Cannot set boot preference");
+            // Reproduce the observed failure: opt-in enabled, receiver disabled by package manager.
+            pm.setComponentEnabledSetting(receiver, android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    android.content.pm.PackageManager.DONT_KILL_APP);
+            Intent launch = pm.getLaunchIntentForPackage(context.getPackageName());
+            check(launch != null, "Launcher missing");
+            home = startActivitySync(launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            waitForHomeFocus(true);
+            check(pm.getComponentEnabledSetting(receiver) == android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    "Opening Aerial did not restore its disabled boot receiver");
+            return "PASS: boot preference/disabled-receiver mismatch repaired on launch"
+                    + "; previousBoot=" + before + "; previousReceiverState=" + stateBefore
+                    + "; finalBoot=" + (enableBoot || before) + "\n";
+        } finally {
+            android.content.SharedPreferences.Editor edit = prefs.edit();
+            if (enableBoot || existed) edit.putBoolean("boot", enableBoot || before);
+            else edit.remove("boot");
+            edit.commit();
+            pm.setComponentEnabledSetting(receiver, enableBoot ? android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED : stateBefore,
+                    android.content.pm.PackageManager.DONT_KILL_APP);
         }
     }
 

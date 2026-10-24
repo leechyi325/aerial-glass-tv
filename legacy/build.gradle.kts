@@ -14,8 +14,8 @@ android {
         applicationId = "app.orchard.tv.legacy"
         minSdk = 19
         targetSdk = 28
-        versionCode = 2
-        versionName = "1.43-legacy.2"
+        versionCode = 3
+        versionName = "1.43-legacy.3"
         testInstrumentationRunner = "app.orchard.tv.legacy.LegacyInstrumentation"
     }
     flavorDimensions += "home"

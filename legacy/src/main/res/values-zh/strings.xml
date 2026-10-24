@@ -33,4 +33,5 @@
     <string name="loading_apps">正在加载应用…</string>
     <string name="no_apps">没有找到可启动的应用。</string>
     <string name="more_apps">↓  更多应用</string>
+    <string name="boot_blocked">系统未允许开机接收器，请检查电视的自启动管理。</string>
 </resources>

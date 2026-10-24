@@ -33,4 +33,5 @@
     <string name="loading_apps">Завантаження застосунків…</string>
     <string name="no_apps">Доступних застосунків не знайдено.</string>
     <string name="more_apps">↓  Усі застосунки</string>
+    <string name="boot_blocked">Система заблокувала запуск. Перевірте налаштування автозапуску телевізора.</string>
 </resources>

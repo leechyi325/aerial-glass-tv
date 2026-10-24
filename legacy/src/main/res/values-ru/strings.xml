@@ -33,4 +33,5 @@
     <string name="loading_apps">Загрузка приложений…</string>
     <string name="no_apps">Доступные приложения не найдены.</string>
     <string name="more_apps">↓  Все приложения</string>
+    <string name="boot_blocked">Система заблокировала запуск. Проверьте настройки автозапуска телевизора.</string>
 </resources>
