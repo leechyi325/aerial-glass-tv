@@ -43,31 +43,39 @@ public final class LegacyInstrumentation extends Instrumentation {
             waitForHomeFocus(true);
             runOnMainSync(() -> { grid[0].requestFocus(); grid[0].setSelection(0); });
             waitForIdleSync();
-            sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_RIGHT);
+            press(KeyEvent.KEYCODE_DPAD_RIGHT);
             waitForIdleSync();
             final int[] selected = {0};
             runOnMainSync(() -> selected[0] = grid[0].getSelectedItemPosition());
             check(selected[0] == 1, "D-pad right did not move to the next tile");
-            sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_LEFT);
+            press(KeyEvent.KEYCODE_DPAD_LEFT);
             waitForIdleSync();
-            sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_UP);
+            press(KeyEvent.KEYCODE_DPAD_UP);
             waitForIdleSync();
             final boolean[] toolbar = {false};
             runOnMainSync(() -> toolbar[0] = home.getCurrentFocus() instanceof Button);
             check(toolbar[0], "D-pad up cannot reach settings");
-            sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_DOWN);
+            press(KeyEvent.KEYCODE_DPAD_DOWN);
             waitForIdleSync();
             runOnMainSync(() -> check(grid[0].hasFocus(), "D-pad down cannot return to apps"));
             runOnMainSync(() -> grid[0].setSelection(0));
             waitForIdleSync();
+            press(KeyEvent.KEYCODE_DPAD_DOWN);
+            waitForIdleSync();
+            runOnMainSync(() -> check(grid[0].getSelectedItemPosition() == 5, "Cannot expand the dock into the app grid"));
+            runOnMainSync(() -> grid[0].setSelection(grid[0].getCount() - 1));
+            waitForIdleSync();
+            press(KeyEvent.KEYCODE_BACK);
+            waitForIdleSync();
+            runOnMainSync(() -> check(grid[0].getSelectedItemPosition() == 0, "Back did not restore the dock"));
             for (int i = 0; i < 3; i++) {
                 ActivityMonitor monitor = addMonitor("app.orchard.tv.legacy.ScreensaverActivity", null, false);
-                sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+                press(KeyEvent.KEYCODE_BACK);
                 Activity saver = waitForMonitorWithTimeout(monitor, 5000);
                 removeMonitor(monitor);
                 check(saver != null, "Screensaver did not open");
                 waitForIdleSync();
-                sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_CENTER);
+                press(KeyEvent.KEYCODE_DPAD_CENTER);
                 waitForIdleSync();
                 // The waking OK must not launch the focused app.
                 runOnMainSync(() -> check(home.hasWindowFocus(), "Wake key leaked through or home did not resume"));
@@ -83,14 +91,14 @@ public final class LegacyInstrumentation extends Instrumentation {
                 grid[0].setSelection(probe);
             });
             waitForIdleSync();
-            sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_CENTER);
+            press(KeyEvent.KEYCODE_DPAD_CENTER);
             waitForHomeFocus(false);
             waitForHomeFocus(true);
             waitForIdleSync();
             runOnMainSync(() -> grid[0].setSelection(0));
             waitForIdleSync();
             if (aerial) testAerial();
-            result.putString("stream", "PASS: app enumeration, D-pad grid/toolbar navigation, app launch/return, 3 screensaver wake cycles on release APK"
+            result.putString("stream", "PASS: app enumeration, D-pad grid/toolbar navigation, dock expansion/collapse, app launch/return, 3 screensaver wake cycles on release APK"
                     + (aerial ? ", H.264 first frame" : "") + "\n");
             result.putInt("tests", 6);
             finish(Activity.RESULT_OK, result);
@@ -98,6 +106,14 @@ public final class LegacyInstrumentation extends Instrumentation {
             result.putString("stream", "FAIL: " + android.util.Log.getStackTraceString(failure));
             finish(Activity.RESULT_CANCELED, result);
         }
+    }
+
+    private void press(int key) {
+        waitForIdleSync();
+        // KitKat may deliver focus callbacks before its input window transaction is committed.
+        SystemClock.sleep(150);
+        sendKeyDownUpSync(key);
+        waitForIdleSync();
     }
 
     private void waitForHomeFocus(boolean expected) {
@@ -119,7 +135,7 @@ public final class LegacyInstrumentation extends Instrumentation {
         try {
             check(prefs.edit().putInt("screensaver", 1).commit(), "Could not select aerial for test");
             ActivityMonitor monitor = addMonitor("app.orchard.tv.legacy.ScreensaverActivity", null, false);
-            sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+            press(KeyEvent.KEYCODE_BACK);
             saver = waitForMonitorWithTimeout(monitor, 5000);
             removeMonitor(monitor);
             check(saver != null, "Aerial screensaver did not open");

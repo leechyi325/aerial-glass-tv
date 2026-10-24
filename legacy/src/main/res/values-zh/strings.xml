@@ -32,4 +32,5 @@
     <string-array name="idle_times"><item>从不</item><item>2 分钟</item><item>5 分钟</item><item>10 分钟</item><item>30 分钟</item></string-array>
     <string name="loading_apps">正在加载应用…</string>
     <string name="no_apps">没有找到可启动的应用。</string>
+    <string name="more_apps">↓  更多应用</string>
 </resources>

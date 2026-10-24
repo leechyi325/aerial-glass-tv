@@ -20,13 +20,14 @@ final class AppCatalog {
     static final class Entry {
         final ComponentName component;
         final String label;
-        final Bitmap icon;
+        final Bitmap tile;
         final boolean stockHome;
 
         Entry(ComponentName component, String label, Bitmap icon, boolean stockHome) {
             this.component = component;
             this.label = label;
-            this.icon = icon;
+            this.tile = TileArt.render(component.getPackageName(), icon, stockHome);
+            if (icon != null) icon.recycle();
             this.stockHome = stockHome;
         }
     }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -27,8 +28,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -43,8 +42,12 @@ public final class MainActivity extends Activity {
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
     private final List<AppCatalog.Entry> apps = new ArrayList<>();
     private FrameLayout root;
-    private GridView grid;
+    private HomeGrid grid;
     private TextView clock, date, network, empty;
+    private TextView heading, hint;
+    private View dock;
+    private Backdrop.Scene scene;
+    private boolean expanded;
     private Button settings;
     private BaseAdapter adapter;
     private float scale;
@@ -71,81 +74,81 @@ public final class MainActivity extends Activity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         scale = getResources().getDisplayMetrics().widthPixels / 960f;
+        scene = Backdrop.scene(this);
         root = new FrameLayout(this);
-        root.setBackground(Backdrop.load(this));
+        root.setClipChildren(false);
+        root.setBackground(new BitmapDrawable(getResources(), scene.wallpaper));
         setContentView(root);
-        clock = text(76);
-        place(clock, 56, 86, 500, 100);
-        date = text(20);
-        place(date, 60, 62, 600, 30);
-        network = text(15);
+        clock = text(25);
+        clock.setTypeface(android.graphics.Typeface.create("sans-serif-light", android.graphics.Typeface.NORMAL));
+        place(clock, 56, 31, 190, 36);
+        date = text(13);
+        date.setTextColor(0xd9ffffff);
+        place(date, 56, 70, 460, 24);
+        network = text(12);
+        network.setTextColor(0xddffffff);
         network.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
-        place(network, 590, 22, 160, 44);
-        settings = new Button(this);
+        place(network, 704, 31, 132, 36);
+        settings = new ControlButton(this);
         settings.setId(View.generateViewId());
-        settings.setText(R.string.settings);
-        settings.setTextSize(TypedValue.COMPLEX_UNIT_PX, px(17));
-        settings.setBackground(focusBackground());
-        settings.setTextColor(Color.WHITE);
+        settings.setBackground(new GlassDrawable(settings, scene, 18, false));
         settings.setOnClickListener(v -> showSettings());
-        place(settings, 770, 22, 134, 44);
-        TextView heading = text(17);
+        place(settings, 855, 30, 49, 36);
+        heading = text(20);
         heading.setText(R.string.apps);
-        place(heading, 56, 246, 700, 30);
-        TextView hint = text(13);
-        hint.setText(R.string.home_hint);
-        place(hint, 56, 510, 848, 24);
-        grid = new GridView(this);
+        heading.setVisibility(View.INVISIBLE);
+        place(heading, 56, 102, 700, 30);
+        dock = new View(this);
+        dock.setBackground(new GlassDrawable(dock, scene, 30, false));
+        place(dock, 30, 350, 900, 153);
+        hint = text(10);
+        hint.setTextColor(0xaaffffff);
+        hint.setGravity(Gravity.CENTER);
+        hint.setText(R.string.more_apps);
+        place(hint, 56, 515, 848, 20);
+        grid = new HomeGrid(this);
         grid.setId(View.generateViewId());
         grid.setNumColumns(5);
         grid.setColumnWidth(px(152));
-        grid.setHorizontalSpacing(px(18));
-        grid.setVerticalSpacing(px(16));
-        grid.setPadding(px(8), px(8), px(8), px(8));
+        grid.setHorizontalSpacing(px(22));
+        grid.setVerticalSpacing(px(20));
+        grid.setPadding(px(8), px(4), px(8), px(10));
+        grid.setClipChildren(false);
         grid.setClipToPadding(false);
+        grid.setVerticalScrollBarEnabled(false);
         grid.setSelector(android.R.color.transparent);
         grid.setDrawSelectorOnTop(true);
         grid.setNextFocusUpId(settings.getId());
         settings.setNextFocusDownId(grid.getId());
-        place(grid, 48, 280, 864, 220);
+        place(grid, 48, 361, 864, 146);
         empty = text(18);
         empty.setText(R.string.loading_apps);
         empty.setGravity(Gravity.CENTER);
-        place(empty, 56, 280, 848, 200);
+        place(empty, 56, 365, 848, 120);
         grid.setEmptyView(empty);
         adapter = new BaseAdapter() {
             @Override public int getCount() { return apps.size(); }
             @Override public Object getItem(int position) { return apps.get(position); }
             @Override public long getItemId(int position) { return position; }
             @Override public View getView(int position, View recycled, ViewGroup parent) {
-                LinearLayout tile;
+                AppTileView tile;
                 if (recycled == null) {
-                    tile = new LinearLayout(MainActivity.this);
-                    tile.setOrientation(LinearLayout.VERTICAL);
-                    tile.setGravity(Gravity.CENTER);
-                    tile.setPadding(px(8), px(8), px(8), px(6));
-                    tile.setBackground(focusBackground());
-                    ImageView icon = new ImageView(MainActivity.this);
-                    icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    tile.addView(icon, new LinearLayout.LayoutParams(px(56), px(56)));
-                    TextView label = text(14);
-                    label.setGravity(Gravity.CENTER);
-                    label.setSingleLine(true);
-                    label.setEllipsize(android.text.TextUtils.TruncateAt.END);
-                    tile.addView(label, new LinearLayout.LayoutParams(-1, px(26)));
-                    tile.setLayoutParams(new android.widget.AbsListView.LayoutParams(-1, px(100)));
-                } else tile = (LinearLayout) recycled;
+                    tile = new AppTileView(MainActivity.this);
+                    tile.setLayoutParams(new android.widget.AbsListView.LayoutParams(-1, px(124)));
+                } else tile = (AppTileView) recycled;
                 AppCatalog.Entry entry = apps.get(position);
-                ImageView icon = (ImageView) tile.getChildAt(0);
-                if (entry.icon != null) icon.setImageBitmap(entry.icon);
-                else icon.setImageResource(R.drawable.ic_launcher);
-                ((TextView) tile.getChildAt(1)).setText(entry.label);
-                tile.setContentDescription(entry.label);
-                tile.setTag(entry.component.getPackageName());
+                tile.bind(entry);
                 return tile;
             }
         };
         grid.setAdapter(adapter);
+        grid.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                setExpanded(position >= 5);
+                grid.refreshTiles();
+            }
+            @Override public void onNothingSelected(android.widget.AdapterView<?> parent) { grid.refreshTiles(); }
+        });
         grid.setOnItemClickListener((parent, view, position, id) -> launch(apps.get(position)));
         grid.setOnItemLongClickListener((parent, view, position, id) -> {
             showAppMenu(apps.get(position));
@@ -162,6 +165,7 @@ public final class MainActivity extends Activity {
         view.setTextColor(Color.WHITE);
         view.setTextSize(TypedValue.COMPLEX_UNIT_PX, px(size));
         view.setIncludeFontPadding(false);
+        view.setShadowLayer(px(2), 0, px(1), 0x66000000);
         return view;
     }
 
@@ -176,12 +180,37 @@ public final class MainActivity extends Activity {
         StateListDrawable states = new StateListDrawable();
         for (int state : new int[]{android.R.attr.state_pressed, android.R.attr.state_selected, android.R.attr.state_focused, 0}) {
             GradientDrawable shape = new GradientDrawable();
-            shape.setColor(state == 0 ? 0x99344460 : 0xff426487);
+            shape.setColor(state == 0 ? 0x00ffffff : 0x25ffffff);
             shape.setCornerRadius(px(12));
-            if (state != 0) shape.setStroke(px(3), Color.WHITE);
+            if (state != 0) shape.setStroke(px(1), 0x99ffffff);
             states.addState(state == 0 ? new int[0] : new int[]{state}, shape);
         }
         return states;
+    }
+
+    private void setExpanded(boolean next) {
+        if (next == expanded) return;
+        expanded = next;
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) grid.getLayoutParams();
+        params.topMargin = px(expanded ? 138 : 361);
+        params.height = px(expanded ? 365 : 146);
+        grid.setLayoutParams(params);
+        dock.setVisibility(expanded ? View.INVISIBLE : View.VISIBLE);
+        heading.setVisibility(expanded ? View.VISIBLE : View.INVISIBLE);
+        hint.setText(expanded ? R.string.home_hint : R.string.more_apps);
+        root.setBackground(new BitmapDrawable(getResources(), expanded ? scene.grid : scene.wallpaper));
+    }
+
+    private void updateBackdrop() {
+        scene = Backdrop.scene(this);
+        root.setBackground(new BitmapDrawable(getResources(), expanded ? scene.grid : scene.wallpaper));
+        dock.setBackground(new GlassDrawable(dock, scene, 30, false));
+        settings.setBackground(new GlassDrawable(settings, scene, 18, false));
+    }
+
+    @Override public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (grid != null) grid.refreshTiles();
     }
 
     @Override protected void onStart() {
@@ -231,8 +260,8 @@ public final class MainActivity extends Activity {
     @Override protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (dialog != null) dialog.dismiss();
-        grid.setSelection(0);
         grid.requestFocus();
+        grid.setSelection(0);
         updateClock();
     }
 
@@ -270,6 +299,7 @@ public final class MainActivity extends Activity {
                     if (firstLoad && !apps.isEmpty()) {
                         firstLoad = false;
                         grid.requestFocus();
+                        grid.setSelection(0);
                     }
                     Log.i("AerialLegacy", "Loaded " + apps.size() + " apps");
                 }
@@ -343,7 +373,7 @@ public final class MainActivity extends Activity {
                     if (which == 3) open(new Intent(Intent.ACTION_GET_CONTENT).setType("image/*").addCategory(Intent.CATEGORY_OPENABLE), PHOTO);
                     else {
                         Preferences.get(this).edit().putInt("wallpaper", which).apply();
-                        root.setBackground(Backdrop.load(this));
+                        updateBackdrop();
                     }
                 }).create();
         showDialog();
@@ -370,7 +400,7 @@ public final class MainActivity extends Activity {
             final boolean imported = success;
             handler.post(() -> {
                 if (destroyed) return;
-                if (imported) root.setBackground(Backdrop.load(this));
+                if (imported) updateBackdrop();
                 else Toast.makeText(this, R.string.image_failed, Toast.LENGTH_LONG).show();
             });
         });
@@ -401,6 +431,40 @@ public final class MainActivity extends Activity {
         handler.removeCallbacks(idle);
         dialog.setOnDismissListener(d -> resetIdle());
         dialog.show();
+        android.view.Window window = dialog.getWindow();
+        if (window != null) {
+            View decor = window.getDecorView();
+            clearPanelBackgrounds(decor);
+            decor.setPadding(px(18), px(16), px(18), px(16));
+            window.setBackgroundDrawable(new GlassDrawable(decor, scene, 28, true));
+            android.widget.ListView list = dialog.getListView();
+            int height = list != null && list.getCount() > 5 ? px(460) : ViewGroup.LayoutParams.WRAP_CONTENT;
+            window.setLayout(px(360), height);
+            window.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+            WindowManager.LayoutParams attributes = window.getAttributes();
+            attributes.x = px(36);
+            window.setAttributes(attributes);
+            window.setDimAmount(.12f);
+        }
+    }
+
+    private void clearPanelBackgrounds(View view) {
+        view.setBackground(null);
+        if (view instanceof TextView) {
+            ((TextView) view).setTextColor(0xf2ffffff);
+            ((TextView) view).setTypeface(android.graphics.Typeface.create("sans-serif", android.graphics.Typeface.NORMAL));
+        }
+        if (view instanceof android.widget.ListView) {
+            android.widget.ListView list = (android.widget.ListView) view;
+            list.setCacheColorHint(Color.TRANSPARENT);
+            list.setSelector(focusBackground());
+            list.setDivider(null);
+        }
+        if (view instanceof Button) view.setBackground(focusBackground());
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) clearPanelBackgrounds(group.getChildAt(i));
+        }
     }
 
     private void resetIdle() {

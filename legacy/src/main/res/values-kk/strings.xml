@@ -32,4 +32,5 @@
     <string-array name="idle_times"><item>Ешқашан</item><item>2 минут</item><item>5 минут</item><item>10 минут</item><item>30 минут</item></string-array>
     <string name="loading_apps">Қолданбалар жүктелуде…</string>
     <string name="no_apps">Ашылатын қолданбалар табылмады.</string>
+    <string name="more_apps">↓  Барлық қолданбалар</string>
 </resources>

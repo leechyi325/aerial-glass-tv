@@ -32,4 +32,5 @@
     <string-array name="idle_times"><item>Ніколи</item><item>2 хвилини</item><item>5 хвилин</item><item>10 хвилин</item><item>30 хвилин</item></string-array>
     <string name="loading_apps">Завантаження застосунків…</string>
     <string name="no_apps">Доступних застосунків не знайдено.</string>
+    <string name="more_apps">↓  Усі застосунки</string>
 </resources>
