@@ -10,6 +10,9 @@ with its history and MIT license preserved. The compatibility edition lives in
 
 [中文](README.md) · **English** · [Compatibility guide (Chinese)](docs/ANDROID44.md) · [MIT license](LICENSE)
 
+**Download**: [v1.43-legacy.3 compatibility preview](https://github.com/leechyi325/aerial-glass-tv/releases/tag/v1.43-legacy.3).
+Choose `standard.apk` for most TVs; see the [release notes (Chinese)](docs/releases/v1.43-legacy.3.md) for variants, signing and validation.
+
 - Glass dock, wide app tiles, focus animation and a glass side menu.
 - App launching, pinning, hiding, photo wallpapers, a clock and 1080p H.264 aerial screensavers.
 - Optional autostart, verified after a real reboot on a Hisense Hi3751 TV running Android 4.4.2.

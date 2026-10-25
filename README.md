@@ -8,6 +8,9 @@
 
 **中文** · [English](README.en.md) · [兼容版完整说明](docs/ANDROID44.md) · [MIT 许可证](LICENSE)
 
+**下载安装包**：[v1.43-legacy.3 兼容预览版](https://github.com/leechyi325/aerial-glass-tv/releases/tag/v1.43-legacy.3)。
+通常选择 `standard.apk`；版本区别、签名与验证情况见 [发布说明](docs/releases/v1.43-legacy.3.md)。
+
 - 底部玻璃托盘、16:9 应用磁贴、焦点放大与右侧玻璃菜单。
 - 应用启动、置顶、隐藏、照片壁纸、时钟和 1080p H.264 航拍屏保。
 - 自启默认关闭，可在设置中开启；已在海信 Hi3751 / Android 4.4.2 上验证真实重启自启。
