@@ -1,3 +1,34 @@
+# Aerial Glass TV
+
+为老电视延续的航拍与玻璃桌面，重点适配 **Android 4.4.2（API 19）**。
+
+基于 [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) 的 Aerial 1.43，
+保留上游历史和 MIT 许可证。兼容版源码位于 `legacy/`，现代版源码仍在 `app/`。
+仓库名为 `aerial-glass-tv`；已安装应用的名称、包名和数据保持原样。
+
+**中文** · [English](README.en.md) · [兼容版完整说明](docs/ANDROID44.md) · [MIT 许可证](LICENSE)
+
+- 底部玻璃托盘、16:9 应用磁贴、焦点放大与右侧玻璃菜单。
+- 应用启动、置顶、隐藏、照片壁纸、时钟和 1080p H.264 航拍屏保。
+- 自启默认关闭，可在设置中开启；已在海信 Hi3751 / Android 4.4.2 上验证真实重启自启。
+- 玻璃采用缓存的模糊壁纸采样，适合旧设备；详细功能边界与真机验证记录见兼容说明。
+
+## 构建 Android 4.4 兼容版
+
+使用 JDK 17、Android SDK Platform 36 和 Build Tools 36.0.0：
+
+```sh
+./gradlew :legacy:assembleStandardRelease :legacy:assembleGuardRelease \
+  :legacy:lintStandardRelease :legacy:lintGuardRelease
+```
+
+普通版 APK：`legacy/build/outputs/apk/standard/release/legacy-standard-release.apk`。
+安装、签名和回退步骤见 [ANDROID44.md](docs/ANDROID44.md)。
+覆盖升级须保留同一签名；密钥和家庭设备资料放在已忽略的 `local/` 中。
+
+<details>
+<summary>上游 Aerial 现代版说明（原版下载链接与功能，不是 Android 4.4 兼容版）</summary>
+
 <div align="center">
 
 <img src="docs/brand/icon.png" width="96" alt="Aerial 图标">
@@ -181,3 +212,5 @@ BUILD=1 KEEP_ADB=1 TV=<电视IP> tools/install.sh
 [MIT](LICENSE)。Inter 字体使用 [SIL Open Font License](FONT-LICENSE-OFL.txt)。天气用的国内城市表来自 [GeoNames](https://www.geonames.org)（CC BY 4.0），天气数据来自 [Open-Meteo](https://open-meteo.com)。
 
 Aerial 是独立的开源项目，与 Apple、小米、TCL 等公司无关。航拍影片版权归 Apple，由 Apple 的服务器直接播放；每日精选图片来自必应。
+
+</details>

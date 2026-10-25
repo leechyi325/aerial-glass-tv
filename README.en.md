@@ -1,3 +1,37 @@
+# Aerial Glass TV
+
+Aerial screensavers and a glass home screen for older TVs, focused on
+**Android 4.4.2 (API 19)**.
+
+Based on Aerial 1.43 from [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv),
+with its history and MIT license preserved. The compatibility edition lives in
+`legacy/`; the modern app remains in `app/`. The repository name is
+`aerial-glass-tv`; installed app names, package IDs and data are unchanged.
+
+[中文](README.md) · **English** · [Compatibility guide (Chinese)](docs/ANDROID44.md) · [MIT license](LICENSE)
+
+- Glass dock, wide app tiles, focus animation and a glass side menu.
+- App launching, pinning, hiding, photo wallpapers, a clock and 1080p H.264 aerial screensavers.
+- Optional autostart, verified after a real reboot on a Hisense Hi3751 TV running Android 4.4.2.
+- Glass uses cached blurred wallpaper samples. See the compatibility guide for feature limits and device validation.
+
+## Build the Android 4.4 edition
+
+Use JDK 17, Android SDK Platform 36 and Build Tools 36.0.0:
+
+```sh
+./gradlew :legacy:assembleStandardRelease :legacy:assembleGuardRelease \
+  :legacy:lintStandardRelease :legacy:lintGuardRelease
+```
+
+Standard APK: `legacy/build/outputs/apk/standard/release/legacy-standard-release.apk`.
+See [ANDROID44.md](docs/ANDROID44.md) for installation, signing and rollback.
+Keep the same signing key for upgrades. Keys and household device records belong
+in the ignored `local/` directory.
+
+<details>
+<summary>Upstream Aerial modern-edition documentation (downloads and features below are not the Android 4.4 edition)</summary>
+
 <div align="center">
 
 <img src="docs/brand/icon.png" width="96" alt="Aerial icon">
@@ -177,3 +211,5 @@ See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for the code, [HANDOFF.md](docs/HAND
 [MIT](LICENSE). The Inter font is under the [SIL Open Font License](FONT-LICENSE-OFL.txt). The list of Chinese cities for the weather is from [GeoNames](https://www.geonames.org) (CC BY 4.0), the weather from [Open-Meteo](https://open-meteo.com).
 
 Aerial is an independent open-source project, not affiliated with Apple, Xiaomi, TCL or any other company. The aerial films belong to Apple and play from Apple's servers; the photo of the day comes from Bing.
+
+</details>
